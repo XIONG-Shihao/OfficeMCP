@@ -6,7 +6,7 @@ Build adapters consume these external component directories:
 | Setting | Required directory and inputs |
 | --- | --- |
 | `OFFICEMCP_XLSX_ENGINE_SOURCE` | XLSX component root: `core/`, `native/` (Cargo sources, lockfile and assets), `scripts/build-native.mjs`, `scripts/export-core.mjs`, `scripts/export-native.mjs`. Tests additionally use `fixtures/`, `scripts/test-support.mjs`, `scripts/test/` and `scripts/support/process-memory.mjs`. |
-| `OFFICEMCP_DOCX_ENGINE_SOURCE` | DOCX component root: `core/`, `scripts/export-core.mjs`, `scripts/prepare-observer.mjs`. Tests additionally use `fixtures/generated.mjs`. |
+| `OFFICEMCP_DOCX_ENGINE_SOURCE` | DOCX component root: `core/`, `scripts/export-core.mjs`, `scripts/prepare-observer.mjs`. |
 
 Currently both components are available from
 `git@github.com:XIONG-Shihao/Agent_Platform.git`, under `editor/xlsx` and

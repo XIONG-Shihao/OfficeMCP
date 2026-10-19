@@ -3,14 +3,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createServiceFixture} from './service-fixture.mjs';
-import {docxSource} from '../scripts/engine-source.mjs';
-import {pathToFileURL} from 'node:url';
-const {documentBytes} = await import(pathToFileURL(path.join(docxSource, 'fixtures/generated.mjs')).href);
+import {docxBytes} from './fixtures.mjs';
 import {unzipSync,strFromU8} from 'fflate';
 import {DOMParser} from '@xmldom/xmldom';
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 async function cleanup(s){s.service.close();const until=Date.now()+10000;while(s.service.docxPool.workers.size){assert(Date.now()<until);await pause(20);}fs.rmSync(s.root,{recursive:true,force:true});}
-async function fixture(){const s=createServiceFixture({prefix:'docx-batch-preservation-',toolset:'docx-agent'}),file=path.join(s.docs,'source.docx'),original=documentBytes('Alpha clause');fs.writeFileSync(file,original);return{...s,file,original,view:(await s.call('docx_open',{path:file})).view};}
+async function fixture(){const s=createServiceFixture({prefix:'docx-batch-preservation-',toolset:'docx-agent'}),file=path.join(s.docs,'source.docx'),original=docxBytes(['Alpha clause']);fs.writeFileSync(file,original);return{...s,file,original,view:(await s.call('docx_open',{path:file})).view};}
 
 test('a second failed batch step discards earlier SDK mutation and accepts no partial candidate',async()=>{
  const s=await fixture();

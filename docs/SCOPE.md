@@ -27,3 +27,15 @@ and combined app journeys belong to the consuming application repository.
 macOS arm64 is the currently exercised native target. Other platforms require
 separate qualification. See [Release verification](RELEASE.md) and
 [Repository boundary](REPOSITORY.md).
+
+## Contract and state transition
+
+The current package is `0.18.0-preview.1`, core contract `0.13`, DOCX contract
+`docx/6`, with private-state schema 3. Removed tools and invalid arguments fail
+before document mutation. Comments remain read-only.
+
+Supported state upgrades run transactionally. Older executables may reject a
+newer state schema; preserve a private-state backup before attempting a downgrade.
+Revision-bound receipts cannot authorize a different document candidate. Save
+requires validation for the exact candidate being published. Migration and
+cleanup must preserve source documents and published outputs.

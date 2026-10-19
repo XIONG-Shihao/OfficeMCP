@@ -267,13 +267,6 @@ test("Documentation lives under docs and local links resolve", () => {
       const target = match[1];
       if (/^[a-z][a-z\d+.-]*:/i.test(target)) continue;
       const resolved = new URL(target, url);
-      // The frozen plan retains historical repository evidence. These links
-      // are not runtime/setup documentation and are absent in an isolated copy.
-      const historical = page === "docs/XLSX_MCP_PLAN.md" && (
-        target === "../../editor/xlsx/docs/migration_20260927/LEGACY_POLICY_AND_VERIFICATION.md" ||
-        /^\.\.\/\.\.\/docs\/verification\/measurements\/xlsx-rust-[a-z0-9-]+-20260927\.json$/.test(target)
-      );
-      if (historical && !fs.existsSync(resolved)) continue;
       assert(fs.existsSync(resolved), `${page}: missing ${target}`);
       if (resolved.hash && resolved.pathname.endsWith(".md")) {
         const headings = fs

@@ -412,7 +412,7 @@ try {
     catalog.layers.flatMap((l) => l.operations).length,
     modernTools.filter((tool) => !tool.name.startsWith("docx_")).length +
       legacyOnlyTools.length +
-      13,
+      14,
   );
   const evidence = {
     localOnly: true,
@@ -442,7 +442,7 @@ try {
     exactPartExtraction: true,
     modernToolCount: modernTools.length,
     legacyToolCount: modernTools.length + legacyOnlyTools.length,
-    docxAgentToolCount: 13,
+    docxAgentToolCount: 14,
   };
   fs.writeFileSync(
     path.join(root, "evidence.json"),
@@ -481,7 +481,7 @@ agentTransport.stderr?.on("data", () => {});
 try {
   await agentClient.connect(agentTransport);
   const tools = (await agentClient.listTools()).tools;
-  assert.equal(tools.length, 13);
+  assert.equal(tools.length, 14);
   assert(!tools.some((tool) => ["docx_render", "office_render", "pdf_render", "pptx_render"].includes(tool.name)));
   assert(tools.every((tool) => tool.name.startsWith("docx_")));
   const invoke = async (name, args) => {
@@ -549,7 +549,7 @@ try {
     },
   });
   console.log(
-    "PASS installed DOCX agent contract: 13 tools, opaque target edit and independent package validation",
+    "PASS installed DOCX agent contract: 14 tools, opaque target edit and independent package validation",
   );
 } finally {
   await agentClient.close();

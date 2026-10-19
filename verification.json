@@ -1,0 +1,54 @@
+{
+  "schema": "officemcp.release-evidence.v2",
+  "version": "0.17.0-preview.1",
+  "contractVersion": "0.13",
+  "docxContractVersion": "docx/4",
+  "recordedDate": "2026-09-23",
+  "status": "csv-and-real-xlsx-candidate-verification-in-progress",
+  "scope": "local-stdio-MCP",
+  "toolCounts": {
+    "all": 53,
+    "recommended": 12,
+    "full": 64,
+    "docx-agent": 13
+  },
+  "catalogEntries": 57,
+  "engines": {
+    "docx": "SuperDoc SDK 2.2.1",
+    "xlsx": "Univer OSS 0.25.2 + preserving OOXML writer",
+    "csv": "Shared indexed literal-table reader and preserving writer"
+  },
+  "rendering": {
+    "ownedBy": "root application",
+    "mcpPageRendering": false,
+    "mcpPageTargets": false,
+    "mcpVisualComparison": false
+  },
+  "tests": {
+    "status": "final-source-checks-pending",
+    "requiredSpreadsheetSkips": 0,
+    "optionalEngines": [
+      "OCR",
+      "licensed Aspose",
+      "LibreOffice DOCX PDF conversion"
+    ],
+    "details": "Real original CSV and XLSX MCP price edits, publication, receipt restart, reopen and independent all-cell preservation checks passed in source tests. Final packaged and live-agent evidence is recorded separately in repository docs/verification/xlsx-editor-mcp-2026-09-22.md. This build-time snapshot is not final release acceptance."
+  },
+  "releaseGates": {
+    "packagedOffline": "pending final candidate",
+    "packagedWorkflows": "pending W1-W5 and CSV",
+    "packagedRecovery": "pending final candidate",
+    "realSamples": "source passed separately for both originals; packaged editor pending",
+    "performance": "diagnostic measurements; no cell-count, memory-MB or latency acceptance cap",
+    "liveAgent": "saved DeepSeek credential explicitly authorized; run pending",
+    "finalAcceptance": "pending"
+  },
+  "historicalEvidence": {
+    "paths": [
+      "docs/verification-0.14.0-preview.1.json",
+      "docs/verification-0.16.0-preview.1.json"
+    ],
+    "certifiesCurrentBuild": false
+  },
+  "evidenceTiming": "Build-time snapshot. Later source-and-bundle-bound acceptance belongs to the repository report."
+}

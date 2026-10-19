@@ -1,0 +1,36 @@
+# Dependencies, prepared runtime engines and local optional engines.
+node_modules
+.generated/
+.engines/
+.state/
+**/target/
+**/bin/
+
+# Generated packages, desktop apps, reports, caches and private documents.
+dist/
+release/
+out/
+.build/
+artifacts/
+test_doc/
+*.app/
+*.dmg
+*.tgz
+*.log
+*.tsbuildinfo
+.DS_Store
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Parent-app-only tooling and historical integration evidence stay local.
+# These files remain in the parent checkout; they are not portable MCP source.
+scripts/benchmark-agent.mjs
+scripts/benchmark-docx-agent-corpus.mjs
+docs/VISUAL_VERIFICATION.md
+docs/ASSESSMENT_WORK_LOG.md
+docs/XLSX_MCP_PLAN.md

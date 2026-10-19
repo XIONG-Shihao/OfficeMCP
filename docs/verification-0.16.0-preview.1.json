@@ -1,0 +1,51 @@
+{
+  "schema": "officemcp.release-evidence.v2",
+  "version": "0.16.0-preview.1",
+  "contractVersion": "0.13",
+  "docxContractVersion": "docx/4",
+  "recordedDate": "2026-09-23",
+  "status": "candidate-source-qualified-product-acceptance-in-progress",
+  "scope": "local-stdio-MCP",
+  "toolCounts": {
+    "all": 53,
+    "recommended": 12,
+    "full": 64,
+    "docx-agent": 13
+  },
+  "catalogEntries": 57,
+  "engines": {
+    "docx": "SuperDoc SDK 2.2.1",
+    "xlsx": "Univer OSS 0.25.2 + preserving OOXML writer"
+  },
+  "rendering": {
+    "ownedBy": "root application",
+    "mcpPageRendering": false,
+    "mcpPageTargets": false,
+    "mcpVisualComparison": false
+  },
+  "tests": {
+    "status": "focused-source-checks-passed-full-mcp-rerun-in-progress-at-packaging",
+    "requiredXlsxSkips": 0,
+    "optionalEngines": [
+      "OCR",
+      "licensed Aspose",
+      "LibreOffice DOCX PDF conversion"
+    ],
+    "details": "51 focused XLSX tests, current app TypeScript/spreadsheet/DOCX/LAN checks and all 64 backend measurement cycles passed. Current full MCP rerun and packaged acceptance are recorded separately in repository docs/verification/xlsx-editor-mcp-2026-09-22.md. This build-time metadata is not final release acceptance."
+  },
+  "releaseGates": {
+    "packagedOffline": "pending",
+    "packagedWorkflows": "pending",
+    "packagedRecovery": "pending",
+    "scaleBudgets": "backend passed; native app paint pending",
+    "liveAgent": "needs dedicated test credential",
+    "realPricingWorkbook": "needs authorized representative fixture",
+    "finalAcceptance": "pending"
+  },
+  "historicalEvidence": {
+    "path": "docs/verification-0.14.0-preview.1.json",
+    "appliesTo": "0.14.0-preview.1 / core 0.12 / docx/3 only",
+    "certifiesCurrentBuild": false
+  },
+  "evidenceTiming": "Build-time snapshot. Later candidate verification belongs to the source-and-bundle-bound repository report; input-dependent final gates remain open."
+}

@@ -1,0 +1,3552 @@
+{
+  "docx_read": {
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "view": {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "candidateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        "representation": {
+          "default": "linear",
+          "type": "string",
+          "enum": [
+            "inventory",
+            "complete",
+            "linear",
+            "structured",
+            "markdown",
+            "text",
+            "domain"
+          ]
+        },
+        "story": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "body"
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "header"
+                },
+                "sectionId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "variant": {
+                  "default": "default",
+                  "type": "string",
+                  "enum": [
+                    "default",
+                    "first",
+                    "even"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "sectionId",
+                "variant"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "footer"
+                },
+                "sectionId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "variant": {
+                  "default": "default",
+                  "type": "string",
+                  "enum": [
+                    "default",
+                    "first",
+                    "even"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "sectionId",
+                "variant"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "footnote"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "endnote"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "textbox"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "domain": {
+          "type": "string",
+          "enum": [
+            "paragraphs",
+            "tables",
+            "sections",
+            "headers_footers",
+            "fields",
+            "footnotes",
+            "endnotes",
+            "hyperlinks",
+            "images",
+            "tracked_changes",
+            "comments",
+            "content_controls",
+            "lists",
+            "bookmarks",
+            "toc",
+            "captions",
+            "cross_references"
+          ]
+        },
+        "includeAnnotations": {
+          "default": true,
+          "type": "boolean"
+        },
+        "readSnapshotId": {
+          "description": "Explicit revision-bound read snapshot returned by an earlier complete read. Reuse it with the next offset to avoid rebuilding every domain.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 150
+        },
+        "offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "limit": {
+          "default": 30,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "view",
+        "representation",
+        "includeAnnotations",
+        "offset",
+        "limit"
+      ],
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "contractVersion",
+        "requestId",
+        "status",
+        "warnings"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "docx/3"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": "object"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "view": {
+          "type": "object",
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "properties": {
+            "documentId": {
+              "type": "string"
+            },
+            "candidateId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "completeDocument",
+            "windowComplete",
+            "matrix",
+            "remainingReads"
+          ],
+          "properties": {
+            "completeDocument": {
+              "type": "boolean"
+            },
+            "windowComplete": {
+              "type": "boolean"
+            },
+            "dimensions": {
+              "type": "object"
+            },
+            "matrix": {
+              "type": "object"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "notChecked": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "itemId",
+                  "provenance"
+                ],
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "story": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object"
+                      }
+                    ]
+                  },
+                  "order": {
+                    "type": "integer"
+                  },
+                  "path": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "target": {
+                    "type": "object",
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "provenance": {
+                    "type": "object",
+                    "properties": {
+                      "engine": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "revision": {
+                        "type": "string"
+                      },
+                      "editable": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "rows": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "details": {
+                    "type": "object"
+                  },
+                  "formattingSummary": {
+                    "type": "object"
+                  },
+                  "reviewChanges": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "altText": {
+                    "type": "string"
+                  },
+                  "packagePart": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "changeType": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer"
+                  },
+                  "partName": {
+                    "type": "string"
+                  },
+                  "textLength": {
+                    "type": "integer"
+                  },
+                  "truncated": {
+                    "type": "boolean"
+                  },
+                  "contentSource": {
+                    "type": "string"
+                  },
+                  "mutationTargetAvailable": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "total": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            },
+            "nextOffset": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "readSnapshotId": {
+              "type": "string"
+            },
+            "layoutId": {
+              "type": "string"
+            },
+            "page": {
+              "type": "integer"
+            },
+            "pageCount": {
+              "type": "integer"
+            },
+            "mapping": {
+              "type": "string"
+            },
+            "pixelVerified": {
+              "type": "boolean"
+            },
+            "complete": {
+              "type": "boolean"
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nextAction": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "io.officemcp/operation": {
+        "name": "docx_read",
+        "risk": "read",
+        "execution": "taskEligible",
+        "handler": "docx.command",
+        "supportedEngines": [
+          "superdoc-v2"
+        ],
+        "resultContract": "docx/3",
+        "presets": [
+          "docx-agent"
+        ]
+      }
+    }
+  },
+  "docx_query": {
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "view": {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "candidateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        "select": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "page"
+                },
+                "layoutId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "page": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 2000
+                }
+              },
+              "required": [
+                "type",
+                "layoutId",
+                "page"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "text"
+                },
+                "pattern": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "mode": {
+                  "default": "contains",
+                  "type": "string",
+                  "enum": [
+                    "contains",
+                    "regex"
+                  ]
+                },
+                "caseSensitive": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "wholeWord": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "pattern",
+                "mode",
+                "caseSensitive",
+                "wholeWord"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "node"
+                },
+                "nodeType": {
+                  "type": "string",
+                  "enum": [
+                    "paragraph",
+                    "heading",
+                    "listItem",
+                    "table",
+                    "tableRow",
+                    "tableCell",
+                    "tableOfContents",
+                    "image",
+                    "sdt",
+                    "run",
+                    "bookmark",
+                    "comment",
+                    "hyperlink",
+                    "footnoteRef",
+                    "endnoteRef",
+                    "crossRef",
+                    "tab",
+                    "lineBreak"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "nodeType"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "entity"
+                },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "content_controls",
+                    "bookmarks",
+                    "captions",
+                    "tracked_changes",
+                    "comments",
+                    "hyperlinks",
+                    "fields",
+                    "footnotes",
+                    "endnotes",
+                    "cross_references"
+                  ]
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "tag": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "author": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "changeType": {
+                  "type": "string",
+                  "enum": [
+                    "insert",
+                    "delete",
+                    "replacement",
+                    "format"
+                  ]
+                },
+                "caseSensitive": {
+                  "default": true,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "domain",
+                "caseSensitive"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "headingPath"
+                },
+                "path": {
+                  "minItems": 1,
+                  "maxItems": 20,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  }
+                },
+                "caseSensitive": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "path",
+                "caseSensitive"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "table"
+                },
+                "contains": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "header": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "caseSensitive": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "caseSensitive"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "story": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "body"
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "header"
+                },
+                "sectionId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "variant": {
+                  "default": "default",
+                  "type": "string",
+                  "enum": [
+                    "default",
+                    "first",
+                    "even"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "sectionId",
+                "variant"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "footer"
+                },
+                "sectionId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "variant": {
+                  "default": "default",
+                  "type": "string",
+                  "enum": [
+                    "default",
+                    "first",
+                    "even"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "sectionId",
+                "variant"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "footnote"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "endnote"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "textbox"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "withinTarget": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "require": {
+          "default": "all",
+          "type": "string",
+          "enum": [
+            "first",
+            "exactlyOne",
+            "all"
+          ]
+        },
+        "offset": {
+          "default": 0,
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "limit": {
+          "default": 30,
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "view",
+        "select",
+        "require",
+        "offset",
+        "limit"
+      ],
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "contractVersion",
+        "requestId",
+        "status",
+        "warnings"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "docx/3"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": "object"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "view": {
+          "type": "object",
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "properties": {
+            "documentId": {
+              "type": "string"
+            },
+            "candidateId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "completeDocument",
+            "windowComplete",
+            "matrix",
+            "remainingReads"
+          ],
+          "properties": {
+            "completeDocument": {
+              "type": "boolean"
+            },
+            "windowComplete": {
+              "type": "boolean"
+            },
+            "dimensions": {
+              "type": "object"
+            },
+            "matrix": {
+              "type": "object"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "notChecked": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "itemId",
+                  "provenance"
+                ],
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "story": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object"
+                      }
+                    ]
+                  },
+                  "order": {
+                    "type": "integer"
+                  },
+                  "path": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "target": {
+                    "type": "object",
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "provenance": {
+                    "type": "object",
+                    "properties": {
+                      "engine": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "revision": {
+                        "type": "string"
+                      },
+                      "editable": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "rows": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "details": {
+                    "type": "object"
+                  },
+                  "formattingSummary": {
+                    "type": "object"
+                  },
+                  "reviewChanges": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "altText": {
+                    "type": "string"
+                  },
+                  "packagePart": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "changeType": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer"
+                  },
+                  "partName": {
+                    "type": "string"
+                  },
+                  "textLength": {
+                    "type": "integer"
+                  },
+                  "truncated": {
+                    "type": "boolean"
+                  },
+                  "contentSource": {
+                    "type": "string"
+                  },
+                  "mutationTargetAvailable": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "total": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "integer"
+            },
+            "nextOffset": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "readSnapshotId": {
+              "type": "string"
+            },
+            "layoutId": {
+              "type": "string"
+            },
+            "page": {
+              "type": "integer"
+            },
+            "pageCount": {
+              "type": "integer"
+            },
+            "mapping": {
+              "type": "string"
+            },
+            "pixelVerified": {
+              "type": "boolean"
+            },
+            "complete": {
+              "type": "boolean"
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nextAction": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "io.officemcp/operation": {
+        "name": "docx_query",
+        "risk": "read",
+        "execution": "taskEligible",
+        "handler": "docx.command",
+        "supportedEngines": [
+          "superdoc-v2"
+        ],
+        "resultContract": "docx/3",
+        "presets": [
+          "docx-agent"
+        ]
+      }
+    }
+  },
+  "docx_validate": {
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "view": {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "candidateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        "visualEvidence": {
+          "description": "Optional LibreOffice/MuPDF baseline comparison. This is visual evidence, not exact Microsoft Word fidelity.",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "changedPages",
+              "type": "string",
+              "enum": [
+                "changedPages",
+                "allPages"
+              ]
+            },
+            "expect": {
+              "type": "object",
+              "properties": {
+                "samePageCount": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "allowedChangedPages": {
+                  "maxItems": 200,
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2000
+                  }
+                },
+                "maxDifferentPixelRatio": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "samePageCount"
+              ],
+              "additionalProperties": false
+            },
+            "pages": {
+              "minItems": 1,
+              "maxItems": 200,
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2000
+              }
+            },
+            "maxPages": {
+              "default": 50,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            },
+            "scale": {
+              "default": 0.75,
+              "type": "number",
+              "minimum": 0.25,
+              "maximum": 2
+            }
+          },
+          "required": [
+            "mode",
+            "maxPages",
+            "scale"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "view"
+      ],
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "contractVersion",
+        "requestId",
+        "status",
+        "warnings"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "docx/3"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": "object"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "view": {
+          "type": "object",
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "properties": {
+            "documentId": {
+              "type": "string"
+            },
+            "candidateId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "completeDocument",
+            "windowComplete",
+            "matrix",
+            "remainingReads"
+          ],
+          "properties": {
+            "completeDocument": {
+              "type": "boolean"
+            },
+            "windowComplete": {
+              "type": "boolean"
+            },
+            "dimensions": {
+              "type": "object"
+            },
+            "matrix": {
+              "type": "object"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "notChecked": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "passed": {
+              "type": "boolean"
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notVerified": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "packageSummary": {
+              "type": "object"
+            },
+            "visualEvidence": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "type": "string"
+                },
+                "engine": {
+                  "type": "string"
+                },
+                "scale": {
+                  "type": "number"
+                },
+                "baselinePageCount": {
+                  "type": "integer"
+                },
+                "candidatePageCount": {
+                  "type": "integer"
+                },
+                "pageCountChanged": {
+                  "type": "boolean"
+                },
+                "comparedPages": {
+                  "type": "integer"
+                },
+                "changedPages": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "truncated": {
+                  "type": "boolean"
+                },
+                "inspectedPages": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "acceptance": {
+                  "type": "object"
+                },
+                "renderer": {
+                  "type": "string"
+                },
+                "pages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "notVerified": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "io.officemcp/operation": {
+        "name": "docx_validate",
+        "risk": "read",
+        "execution": "taskEligible",
+        "handler": "docx.command",
+        "supportedEngines": [
+          "superdoc-v2",
+          "libreoffice-optional",
+          "mupdf-optional"
+        ],
+        "resultContract": "docx/3",
+        "presets": [
+          "docx-agent"
+        ]
+      }
+    }
+  },
+  "docx_compare": {
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "view": {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "candidateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        "visualEvidence": {
+          "description": "Optional LibreOffice/MuPDF baseline comparison. This is visual evidence, not exact Microsoft Word fidelity.",
+          "type": "object",
+          "properties": {
+            "mode": {
+              "default": "changedPages",
+              "type": "string",
+              "enum": [
+                "changedPages",
+                "allPages"
+              ]
+            },
+            "expect": {
+              "type": "object",
+              "properties": {
+                "samePageCount": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "allowedChangedPages": {
+                  "maxItems": 200,
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2000
+                  }
+                },
+                "maxDifferentPixelRatio": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "samePageCount"
+              ],
+              "additionalProperties": false
+            },
+            "pages": {
+              "minItems": 1,
+              "maxItems": 200,
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2000
+              }
+            },
+            "maxPages": {
+              "default": 50,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            },
+            "scale": {
+              "default": 0.75,
+              "type": "number",
+              "minimum": 0.25,
+              "maximum": 2
+            }
+          },
+          "required": [
+            "mode",
+            "maxPages",
+            "scale"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "view"
+      ],
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "contractVersion",
+        "requestId",
+        "status",
+        "warnings"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "docx/3"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": "object"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "view": {
+          "type": "object",
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "properties": {
+            "documentId": {
+              "type": "string"
+            },
+            "candidateId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "completeDocument",
+            "windowComplete",
+            "matrix",
+            "remainingReads"
+          ],
+          "properties": {
+            "completeDocument": {
+              "type": "boolean"
+            },
+            "windowComplete": {
+              "type": "boolean"
+            },
+            "dimensions": {
+              "type": "object"
+            },
+            "matrix": {
+              "type": "object"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "notChecked": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "hasChanges": {
+              "type": "boolean"
+            },
+            "changedComponents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "summary": {
+              "type": "object"
+            },
+            "coverage": {
+              "type": "object"
+            },
+            "baseFingerprint": {
+              "type": "string"
+            },
+            "targetFingerprint": {
+              "type": "string"
+            },
+            "visualEvidence": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "type": "string"
+                },
+                "engine": {
+                  "type": "string"
+                },
+                "scale": {
+                  "type": "number"
+                },
+                "baselinePageCount": {
+                  "type": "integer"
+                },
+                "candidatePageCount": {
+                  "type": "integer"
+                },
+                "pageCountChanged": {
+                  "type": "boolean"
+                },
+                "comparedPages": {
+                  "type": "integer"
+                },
+                "changedPages": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "truncated": {
+                  "type": "boolean"
+                },
+                "inspectedPages": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "acceptance": {
+                  "type": "object"
+                },
+                "renderer": {
+                  "type": "string"
+                },
+                "pages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "notVerified": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "io.officemcp/operation": {
+        "name": "docx_compare",
+        "risk": "read",
+        "execution": "taskEligible",
+        "handler": "docx.command",
+        "supportedEngines": [
+          "superdoc-v2",
+          "libreoffice-optional",
+          "mupdf-optional"
+        ],
+        "resultContract": "docx/3",
+        "presets": [
+          "docx-agent"
+        ]
+      }
+    }
+  },
+  "docx_image_get": {
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "view": {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "candidateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "view",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "contractVersion",
+        "requestId",
+        "status",
+        "warnings"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "docx/3"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": "object"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "view": {
+          "type": "object",
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "properties": {
+            "documentId": {
+              "type": "string"
+            },
+            "candidateId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "completeDocument",
+            "windowComplete",
+            "matrix",
+            "remainingReads"
+          ],
+          "properties": {
+            "completeDocument": {
+              "type": "boolean"
+            },
+            "windowComplete": {
+              "type": "boolean"
+            },
+            "dimensions": {
+              "type": "object"
+            },
+            "matrix": {
+              "type": "object"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "notChecked": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "assetId": {
+              "type": "string"
+            },
+            "page": {
+              "type": "integer"
+            },
+            "pageCount": {
+              "type": "integer"
+            },
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            },
+            "engine": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "size": {
+              "type": "integer"
+            },
+            "layoutId": {
+              "type": "string"
+            },
+            "renderer": {
+              "type": "string"
+            },
+            "anchors": {
+              "type": "object"
+            },
+            "notVerified": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "io.officemcp/operation": {
+        "name": "docx_image_get",
+        "risk": "read",
+        "execution": "taskEligible",
+        "handler": "docx.command",
+        "supportedEngines": [
+          "superdoc-v2"
+        ],
+        "resultContract": "docx/3",
+        "presets": [
+          "docx-agent"
+        ]
+      }
+    }
+  },
+  "docx_apply": {
+    "inputSchema": {
+      "type": "object",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "properties": {
+        "view": {
+          "type": "object",
+          "properties": {
+            "documentId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "candidateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        "operationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 150
+        },
+        "mode": {
+          "default": "apply",
+          "type": "string",
+          "enum": [
+            "preview",
+            "apply"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "insert_paragraphs",
+            "insert_heading",
+            "replace_text",
+            "delete_text",
+            "delete_blocks",
+            "append_list",
+            "create_table",
+            "add_comments",
+            "resolve_comments",
+            "reply_to_comment",
+            "rewrite_block",
+            "accept_tracked_changes",
+            "reject_tracked_changes",
+            "normalize_body_font_size",
+            "set_font_family",
+            "apply_letter_spacing",
+            "insert_toc",
+            "insert_table_row",
+            "insert_table_column",
+            "delete_table_row",
+            "delete_table_column",
+            "split_table",
+            "convert_list",
+            "split_list",
+            "attach_numbering",
+            "add_list_items",
+            "format_text",
+            "apply_style",
+            "format_paragraph",
+            "style_table",
+            "move_table",
+            "delete_table",
+            "set_paragraph_spacing",
+            "insert_page_break",
+            "add_hyperlink",
+            "write_table_cells",
+            "merge_table_cells",
+            "unmerge_table_cells",
+            "insert_image",
+            "replace_image",
+            "delete_image",
+            "resize_image",
+            "crop_image",
+            "position_image",
+            "set_image_wrap",
+            "set_image_alt_text",
+            "rotate_image",
+            "accept_tracked_change",
+            "reject_tracked_change",
+            "insert_section_break",
+            "set_section_layout",
+            "set_content_control_text",
+            "set_checkbox_control",
+            "set_date_control",
+            "set_choice_control",
+            "edit_repeating_section",
+            "update_toc",
+            "format_table_cell",
+            "format_table_row",
+            "format_paragraph_advanced",
+            "materialize_header_footer",
+            "replace_header_footer_text",
+            "patch_hyperlink",
+            "remove_hyperlink",
+            "rename_bookmark",
+            "remove_bookmark",
+            "update_footnote",
+            "remove_footnote",
+            "remove_field",
+            "insert_caption",
+            "update_caption",
+            "remove_caption",
+            "insert_cross_reference",
+            "remove_cross_reference",
+            "update_endnote",
+            "remove_endnote"
+          ],
+          "description": "One bounded high-level action. docx_inspect returns exact action help and the current supported catalogue."
+        },
+        "arguments": {
+          "default": {},
+          "description": "Arguments for the selected action. Request its descriptor with docx_inspect.actions when needed; unknown or incomplete action arguments fail instead of being guessed.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/__schema0"
+          }
+        },
+        "selectorTarget": {
+          "description": "Opaque target returned by docx_query or a domain read. Query/read again after every mutation.",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "selectorTargets": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 150
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "select": {
+          "description": "Inline selector resolved with require=exactlyOne. Prefer opaque targets when already available.",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "page"
+                },
+                "layoutId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "page": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 2000
+                }
+              },
+              "required": [
+                "type",
+                "layoutId",
+                "page"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "text"
+                },
+                "pattern": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "mode": {
+                  "default": "contains",
+                  "type": "string",
+                  "enum": [
+                    "contains",
+                    "regex"
+                  ]
+                },
+                "caseSensitive": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "wholeWord": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "pattern",
+                "mode",
+                "caseSensitive",
+                "wholeWord"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "node"
+                },
+                "nodeType": {
+                  "type": "string",
+                  "enum": [
+                    "paragraph",
+                    "heading",
+                    "listItem",
+                    "table",
+                    "tableRow",
+                    "tableCell",
+                    "tableOfContents",
+                    "image",
+                    "sdt",
+                    "run",
+                    "bookmark",
+                    "comment",
+                    "hyperlink",
+                    "footnoteRef",
+                    "endnoteRef",
+                    "crossRef",
+                    "tab",
+                    "lineBreak"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "nodeType"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "entity"
+                },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "content_controls",
+                    "bookmarks",
+                    "captions",
+                    "tracked_changes",
+                    "comments",
+                    "hyperlinks",
+                    "fields",
+                    "footnotes",
+                    "endnotes",
+                    "cross_references"
+                  ]
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "tag": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "author": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "changeType": {
+                  "type": "string",
+                  "enum": [
+                    "insert",
+                    "delete",
+                    "replacement",
+                    "format"
+                  ]
+                },
+                "caseSensitive": {
+                  "default": true,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "domain",
+                "caseSensitive"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "headingPath"
+                },
+                "path": {
+                  "minItems": 1,
+                  "maxItems": 20,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  }
+                },
+                "caseSensitive": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "path",
+                "caseSensitive"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "table"
+                },
+                "contains": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "header": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "caseSensitive": {
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "caseSensitive"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "story": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "body"
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "header"
+                },
+                "sectionId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "variant": {
+                  "default": "default",
+                  "type": "string",
+                  "enum": [
+                    "default",
+                    "first",
+                    "even"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "sectionId",
+                "variant"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "footer"
+                },
+                "sectionId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "variant": {
+                  "default": "default",
+                  "type": "string",
+                  "enum": [
+                    "default",
+                    "first",
+                    "even"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "sectionId",
+                "variant"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "footnote"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "endnote"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "textbox"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "steps": {
+          "minItems": 1,
+          "maxItems": 25,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": [
+                  "insert_paragraphs",
+                  "insert_heading",
+                  "replace_text",
+                  "delete_text",
+                  "delete_blocks",
+                  "append_list",
+                  "create_table",
+                  "add_comments",
+                  "resolve_comments",
+                  "reply_to_comment",
+                  "rewrite_block",
+                  "accept_tracked_changes",
+                  "reject_tracked_changes",
+                  "normalize_body_font_size",
+                  "set_font_family",
+                  "apply_letter_spacing",
+                  "insert_toc",
+                  "insert_table_row",
+                  "insert_table_column",
+                  "delete_table_row",
+                  "delete_table_column",
+                  "split_table",
+                  "convert_list",
+                  "split_list",
+                  "attach_numbering",
+                  "add_list_items",
+                  "format_text",
+                  "apply_style",
+                  "format_paragraph",
+                  "style_table",
+                  "move_table",
+                  "delete_table",
+                  "set_paragraph_spacing",
+                  "insert_page_break",
+                  "add_hyperlink",
+                  "write_table_cells",
+                  "merge_table_cells",
+                  "unmerge_table_cells",
+                  "insert_image",
+                  "replace_image",
+                  "delete_image",
+                  "resize_image",
+                  "crop_image",
+                  "position_image",
+                  "set_image_wrap",
+                  "set_image_alt_text",
+                  "rotate_image",
+                  "accept_tracked_change",
+                  "reject_tracked_change",
+                  "insert_section_break",
+                  "set_section_layout",
+                  "set_content_control_text",
+                  "set_checkbox_control",
+                  "set_date_control",
+                  "set_choice_control",
+                  "edit_repeating_section",
+                  "update_toc",
+                  "format_table_cell",
+                  "format_table_row",
+                  "format_paragraph_advanced",
+                  "materialize_header_footer",
+                  "replace_header_footer_text",
+                  "patch_hyperlink",
+                  "remove_hyperlink",
+                  "rename_bookmark",
+                  "remove_bookmark",
+                  "update_footnote",
+                  "remove_footnote",
+                  "remove_field",
+                  "insert_caption",
+                  "update_caption",
+                  "remove_caption",
+                  "insert_cross_reference",
+                  "remove_cross_reference",
+                  "update_endnote",
+                  "remove_endnote"
+                ]
+              },
+              "arguments": {
+                "default": {},
+                "description": "Arguments for the selected action. Request its descriptor with docx_inspect.actions when needed; unknown or incomplete action arguments fail instead of being guessed.",
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "$ref": "#/$defs/__schema0"
+                }
+              },
+              "selectorTarget": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "additionalProperties": false
+              },
+              "selectorTargets": {
+                "minItems": 1,
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 150
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "select": {
+                "description": "Inline selector resolved with require=exactlyOne against the step's current revision.",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "page"
+                      },
+                      "layoutId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 150
+                      },
+                      "page": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 2000
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "layoutId",
+                      "page"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "text"
+                      },
+                      "pattern": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32000
+                      },
+                      "mode": {
+                        "default": "contains",
+                        "type": "string",
+                        "enum": [
+                          "contains",
+                          "regex"
+                        ]
+                      },
+                      "caseSensitive": {
+                        "default": true,
+                        "type": "boolean"
+                      },
+                      "wholeWord": {
+                        "default": false,
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "pattern",
+                      "mode",
+                      "caseSensitive",
+                      "wholeWord"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "node"
+                      },
+                      "nodeType": {
+                        "type": "string",
+                        "enum": [
+                          "paragraph",
+                          "heading",
+                          "listItem",
+                          "table",
+                          "tableRow",
+                          "tableCell",
+                          "tableOfContents",
+                          "image",
+                          "sdt",
+                          "run",
+                          "bookmark",
+                          "comment",
+                          "hyperlink",
+                          "footnoteRef",
+                          "endnoteRef",
+                          "crossRef",
+                          "tab",
+                          "lineBreak"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "nodeType"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "entity"
+                      },
+                      "domain": {
+                        "type": "string",
+                        "enum": [
+                          "content_controls",
+                          "bookmarks",
+                          "captions",
+                          "tracked_changes",
+                          "comments",
+                          "hyperlinks",
+                          "fields",
+                          "footnotes",
+                          "endnotes",
+                          "cross_references"
+                        ]
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 1000
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 1000
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32000
+                      },
+                      "tag": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 1000
+                      },
+                      "author": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 1000
+                      },
+                      "changeType": {
+                        "type": "string",
+                        "enum": [
+                          "insert",
+                          "delete",
+                          "replacement",
+                          "format"
+                        ]
+                      },
+                      "caseSensitive": {
+                        "default": true,
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "domain",
+                      "caseSensitive"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "headingPath"
+                      },
+                      "path": {
+                        "minItems": 1,
+                        "maxItems": 20,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1000
+                        }
+                      },
+                      "caseSensitive": {
+                        "default": false,
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "path",
+                      "caseSensitive"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "table"
+                      },
+                      "contains": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32000
+                      },
+                      "header": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32000
+                      },
+                      "caseSensitive": {
+                        "default": false,
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "caseSensitive"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "story": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "body"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "header"
+                      },
+                      "sectionId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 150
+                      },
+                      "variant": {
+                        "default": "default",
+                        "type": "string",
+                        "enum": [
+                          "default",
+                          "first",
+                          "even"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "sectionId",
+                      "variant"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "footer"
+                      },
+                      "sectionId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 150
+                      },
+                      "variant": {
+                        "default": "default",
+                        "type": "string",
+                        "enum": [
+                          "default",
+                          "first",
+                          "even"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "sectionId",
+                      "variant"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "footnote"
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 150
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "endnote"
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 150
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "textbox"
+                      },
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 150
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "id"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "action",
+              "arguments"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "workflow": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "fill_template"
+                },
+                "bindings": {
+                  "minItems": 1,
+                  "maxItems": 200,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "placeholder": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 32000
+                      },
+                      "value": {
+                        "type": "string",
+                        "maxLength": 32000
+                      },
+                      "expectedCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1000
+                      }
+                    },
+                    "required": [
+                      "placeholder",
+                      "value",
+                      "expectedCount"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "changeMode": {
+                  "default": "direct",
+                  "type": "string",
+                  "enum": [
+                    "direct",
+                    "tracked"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "bindings",
+                "changeMode"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "update_table"
+                },
+                "cells": {
+                  "minItems": 1,
+                  "maxItems": 100,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "row": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "column": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "expectedText": {
+                        "type": "string",
+                        "maxLength": 32000
+                      },
+                      "text": {
+                        "type": "string",
+                        "maxLength": 32000
+                      }
+                    },
+                    "required": [
+                      "row",
+                      "column",
+                      "expectedText",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "caption": {
+                  "type": "object",
+                  "properties": {
+                    "position": {
+                      "default": "below",
+                      "type": "string",
+                      "enum": [
+                        "above",
+                        "below"
+                      ]
+                    },
+                    "label": {
+                      "default": "Table",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 32000
+                    },
+                    "text": {
+                      "type": "string",
+                      "maxLength": 32000
+                    }
+                  },
+                  "required": [
+                    "position",
+                    "label",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "type",
+                "cells"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "normalize_document_style"
+                },
+                "fontFamily": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "fontSize": {
+                  "type": "number",
+                  "minimum": 1,
+                  "maximum": 200
+                },
+                "changeMode": {
+                  "default": "direct",
+                  "type": "string",
+                  "enum": [
+                    "direct",
+                    "tracked"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "changeMode"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "expect": {
+          "type": "object",
+          "properties": {
+            "beforeOccurrences": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32000
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              }
+            },
+            "remainingOccurrences": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 32000
+              },
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              }
+            },
+            "changedOccurrences": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          },
+          "additionalProperties": false
+        },
+        "author": {
+          "default": "OfficeMCP",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "view",
+        "mode",
+        "author"
+      ],
+      "additionalProperties": false,
+      "$defs": {
+        "__schema0": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema0"
+              }
+            },
+            {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/__schema0"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "outputSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [
+        "contractVersion",
+        "requestId",
+        "status",
+        "warnings"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "docx/3"
+        },
+        "requestId": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "type": "object"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "view": {
+          "type": "object",
+          "required": [
+            "documentId",
+            "revision"
+          ],
+          "properties": {
+            "documentId": {
+              "type": "string"
+            },
+            "candidateId": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "required": [
+            "completeDocument",
+            "windowComplete",
+            "matrix",
+            "remainingReads"
+          ],
+          "properties": {
+            "completeDocument": {
+              "type": "boolean"
+            },
+            "windowComplete": {
+              "type": "boolean"
+            },
+            "dimensions": {
+              "type": "object"
+            },
+            "matrix": {
+              "type": "object"
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "remainingReads": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "notChecked": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "candidateId": {
+              "type": "string"
+            },
+            "candidateRevision": {
+              "type": "string"
+            },
+            "applied": {
+              "type": "boolean"
+            },
+            "preview": {
+              "type": "boolean"
+            },
+            "wouldChange": {
+              "type": "boolean"
+            },
+            "action": {
+              "type": "string"
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "affectedTargets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "verificationPassed": {
+              "type": "boolean"
+            },
+            "validationPassed": {
+              "type": "boolean"
+            },
+            "published": {
+              "type": "boolean"
+            },
+            "engine": {
+              "type": "string"
+            },
+            "nextAction": {
+              "type": "string"
+            },
+            "atomicity": {
+              "type": "string"
+            },
+            "workflow": {
+              "type": "string"
+            },
+            "postconditions": {
+              "type": "object"
+            },
+            "semanticDelta": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "io.officemcp/operation": {
+        "name": "docx_apply",
+        "risk": "mutate",
+        "execution": "taskEligible",
+        "handler": "docx.command",
+        "supportedEngines": [
+          "superdoc-v2"
+        ],
+        "resultContract": "docx/3",
+        "presets": [
+          "docx-agent"
+        ]
+      }
+    }
+  }
+}

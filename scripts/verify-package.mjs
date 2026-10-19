@@ -56,12 +56,13 @@ assert.deepEqual(
   markdownPaths,
   [
     "README.md",
+    "agent/OfficeMCP_docx.md",
     ...fs
       .readdirSync(path.join(project, "docs"))
       .filter((name) => name.endsWith(".md"))
       .map((name) => `docs/${name}`),
   ].sort(),
-  "Package must contain current docs under docs/ and only README at its root",
+  "Package must contain the portable agent guide, current docs and only README at its root",
 );
 assert(
   packed.files.some((file) => file.path === "verification.json"),

@@ -7,7 +7,7 @@ const npmCommand=process.platform==='win32'?process.execPath:'npm';
 const npmPrefix=process.platform==='win32'?[process.env.npm_execpath??path.join(path.dirname(process.execPath),'node_modules/npm/bin/npm-cli.js')]:[];
 import assert from "node:assert/strict";
 import { unzipSync, strFromU8 } from "fflate";
-import { DOMParser } from '@xmldom/xmldom';
+import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import { writeFixtures } from "../test/fixtures.mjs";
@@ -296,8 +296,22 @@ try {
   assert(xsaved.data.published);
   const originalParts = unzipSync(fs.readFileSync(path.join(docs, "budget.xlsx")));
   const savedParts = unzipSync(fs.readFileSync(path.join(docs, "oss-budget.xlsx")));
-  for (const [name, value] of Object.entries(originalParts))
-    if (!["xl/workbook.xml", "xl/worksheets/budget.xml"].includes(name)) assert.deepEqual(savedParts[name], value, name);
+  for (const [name, value] of Object.entries(originalParts)) {
+    if (["xl/workbook.xml", "xl/worksheets/budget.xml"].includes(name)) continue;
+    if (name === "xl/worksheets/hidden.xml") {
+      // The current writer adds the missing used-range metadata even to an
+      // untouched sheet. Allow that exact derived field; preserve all content.
+      const before = new DOMParser().parseFromString(strFromU8(value), 'application/xml');
+      const after = new DOMParser().parseFromString(strFromU8(savedParts[name]), 'application/xml');
+      const dimensions = Array.from(after.getElementsByTagNameNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main', 'dimension'));
+      assert.equal(before.getElementsByTagNameNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main', 'dimension').length, 0);
+      assert.equal(dimensions.length, 1);
+      assert.equal(dimensions[0].getAttribute('ref'), 'A1');
+      dimensions[0].parentNode.removeChild(dimensions[0]);
+      const serializer = new XMLSerializer();
+      assert.equal(serializer.serializeToString(after), serializer.serializeToString(before), name);
+    } else assert.deepEqual(savedParts[name], value, name);
+  }
   const savedXml = strFromU8(savedParts["xl/worksheets/budget.xml"]);
   const savedDoc = new DOMParser().parseFromString(savedXml, 'application/xml');
   const savedB2 = Array.from(savedDoc.getElementsByTagNameNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main', 'c')).find(cell => cell.getAttribute('r') === 'B2');

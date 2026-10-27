@@ -1,2 +1,0 @@
-aspose-cells-python==26.9.0
-aspose-slides==26.8.1

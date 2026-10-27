@@ -1,0 +1,24 @@
+[project]
+name = "officemcp"
+version = "0.1.0"
+description = "MCP tools for PDF, Word, Excel and PowerPoint files: standardized actions over published libraries"
+readme = "README.md"
+requires-python = ">=3.12, <3.13"
+license = { text = "UNLICENSED" }
+dependencies = [
+    "mcp>=1.20",
+    "python-docx>=1.2",
+    "openpyxl==3.1.5",
+    "python-pptx==1.0.2",
+    "pypdf>=6.0",
+    "reportlab>=4.0",
+    "lxml>=5.0",
+    "jsonschema>=4.0",
+]
+
+[project.scripts]
+officemcp = "officemcp.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.8,<0.13"]
+build-backend = "uv_build"
